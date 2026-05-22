@@ -21,4 +21,6 @@ export * from '@/views/CareerView';
 export * from '@/views/SearchView';
 export * from '@/views/PersonView';
 
-
+export * from '@/views/FavoritesView';
+export * from '@/views/CartView';
+export * from '@/views/SettingsView';

@@ -18,7 +18,10 @@ import {
   ErrorView, 
   HomeView, 
   SearchView, 
-  CareerView
+  CareerView,
+  FavoritesView,
+  CartView,
+  SettingsView
 } from '@/views';
 import { Route, Routes } from 'react-router-dom';
 
@@ -62,6 +65,10 @@ export const App = () => {
         <Route path="/genres/:type/:genre_id" element={<GenresView />} />
         
         <Route path="/search" element={<SearchView />} />
+
+        <Route path="/favorites" element={<FavoritesView />} />
+        <Route path="/cart" element={<CartView />} />
+        <Route path="/settings" element={<SettingsView />} /> 
 
       </Route>
 
