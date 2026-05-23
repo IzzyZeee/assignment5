@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 // import { UserContext } from "@/context";
 
 export type UserItem = { // per item that'll be stored in favorites/cart (a movie, a tv show, a tv season)
@@ -48,18 +48,6 @@ function sameItem (x: UserItem, y: UserItem) { // checks if two items are the sa
 }
 
 export const UserContext = createContext<UserContextType | undefined>(undefined); // this is global and lets the entire site use the info.
-
-//     return (
-//         <div>
-
-//         </div>
-//     );
-
-
-
-// import { useEffect, useState, type ReactNode } from "react";
-// import { UserContext } from "@/context";
-// import { CART_KEY, FAVORITES_KEY, GENRES_KEY, load, USERNAME_KEY, type UserItem } from "./UserContext";
 
 type UserProviderProps = {
   children: ReactNode;
@@ -148,4 +136,16 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
             {children}
         </UserContext.Provider>
     );
+
+    
 };
+
+export function useUser() { // shortcut for use usercontext
+    const context = useContext(UserContext);
+
+    if (!context) {
+        throw new Error('useUser must be used inside UserProvider!');
+    }
+
+    return context;
+}

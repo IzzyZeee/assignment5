@@ -43,6 +43,10 @@ export const Header = () => {
           <Link to="/trending">Trending</Link>
           <Link to="/genres/movie/28">Genre</Link>
           <Link to="/search">Search</Link>
+          <Link to="/favorites">Favorites</Link>
+          {/* <Link to="/cart">Search</Link>
+          <Link to="/settings">Search</Link> */}
+
           <div className="ml-auto">
             <SearchBar value={search} onChange={useSearch} onSubmitSearch={doSearch} ></SearchBar>
           </div>
