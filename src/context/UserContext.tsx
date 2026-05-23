@@ -1,0 +1,122 @@
+import { createContext, useEffect, useState, type ReactNode } from "react";
+// import { UserContext } from "@/context";
+
+export type UserItem = { // per item that'll be stored in favorites/cart (a movie, a tv show, a tv season)
+    type: 'movie' | 'tv' | 'season';
+    id: number;
+    title: string;
+    release: number; // release date
+    imagePath: string | null;
+    seasonNumber?: number; // if it's a season ("?" means optional. only for tv)
+}
+
+export type UserContextType = { // contains all the context
+    username: string; // username you see on the top of screen ykyk
+    favorites: UserItem[]; // array of UserItem types (basically all your favorites)
+    cart: UserItem[];
+    genrePreferences: number[]; // array of numbers, the IDs for the selected preferred genres in settings
+    addFavorite: (item: UserItem) => void; // function description for a function that is made later, takes/returns x and y
+    addCart: (item: UserItem) => void; // takes a UserItem but function returns nothing
+    setGenrePreferences: (preferences: number[]) => void; // takes array of selected genres' IDs
+    removeFavorite: (id: number, type: UserItem['type']) => void; // when looking in existing list: need item's id + type because movie/tv can hv same id
+    removeCart: (id: number, type: UserItem['type']) => void;
+    // isFavorite: (id: number, type: UserItem['type']) => boolean; // UserItem['variableInUserItemWithThisName']
+    // isInCart: (id: number, type: UserItem['type']) => boolean;
+}
+
+export const USERNAME_KEY = "username_key"; // keys for fetching values from localStorage, names r lowkey arbitrary
+export const FAVORITES_KEY = "favorites_key";
+export const CART_KEY = "cart_key";
+export const GENRES_KEY = "genres_key";
+
+export function load<Type>(key: string, backup: Type): Type { // to load any type from localStorage
+    const saved = localStorage.getItem(key); // get item is in localStorage
+
+    if (!saved) {
+        return backup; // when the item ain't in there
+    }
+
+    try {
+        return JSON.parse(saved) as Type; // note: localStorage only stores stuff in strings, so you have to turn it into Type
+    } catch {
+        return backup;
+    }
+} 
+
+function sameItem (x: UserItem, y: UserItem) { // checks if two items are the same (for adding/removing favs/cart)
+    return x.id === y.id && x.type === y.type; // if same, must have same id and type
+}
+
+export const UserContext = createContext<UserContextType | undefined>(undefined); // this is global and lets the entire site use the info.
+
+//     return (
+//         <div>
+
+//         </div>
+//     );
+
+
+
+// import { useEffect, useState, type ReactNode } from "react";
+// import { UserContext } from "@/context";
+// import { CART_KEY, FAVORITES_KEY, GENRES_KEY, load, USERNAME_KEY, type UserItem } from "./UserContext";
+
+type UserProviderProps = {
+  children: ReactNode;
+};
+
+export const UserProvider = ({ children }: UserProviderProps) => { // stuff shared by the whole ahh website
+    const [username, setUsername] = useState(() => load(USERNAME_KEY, 'NoUsername')); // using states to save the changeable things.
+    const [favorites, setFavorites] = useState<UserItem[]>(() => load(FAVORITES_KEY, [])); // favorites is an array. initially empty
+    const [cart, setCart] = useState(() => load<UserItem[]>(CART_KEY, []));
+    const [genrePreferences, setGenrePreferences] = useState<UserItem[]>(() => load(GENRES_KEY, []));
+
+    useEffect (() => { // useEffect to store stuff into localStorage, with respective deps
+        localStorage.setItem(USERNAME_KEY, JSON.stringify(username)) // must be stringified to put in localStorage
+    }, [username]); // only when username changes, trigger this useEffect
+
+    useEffect (() => {  
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites)) 
+    }, [favorites]);
+
+    useEffect (() => {  
+        localStorage.setItem(CART_KEY, JSON.stringify(cart)) 
+    }, [cart]);
+    
+    useEffect (() => {  
+        localStorage.setItem(GENRES_KEY, JSON.stringify(genrePreferences)) 
+    }, [genrePreferences]);
+
+    function addFavorite(item: UserItem) { // must remove item if in cart, then add to favorites.
+        setCart((prev) => prev.filter((cartItem) => !sameItem(cartItem, item))); // filter only keeps TRUE items (if NOT the same item, then keep)
+        setFavorites((prev) => {
+            if (prev.some((currentItem) => sameItem(currentItem, item))) { 
+                return prev; // if already added in favorites
+            } else {
+                return [...prev, item]; 
+            }
+        });
+    }
+
+    function addCart(item: UserItem) { // must remove item if in cart, then add to favorites.
+       
+        if (item.type === 'tv') { // cannot add tv's
+            return;
+        }
+       
+        setFavorites((prev) => prev.filter((cartItem) => !sameItem(cartItem, item)));
+        setCart((prev) => {
+            if (prev.some((currentItem) => sameItem(currentItem, item))) { 
+                return prev; // if already added in cart
+            } else {
+                return [...prev, item]; 
+            }
+        });
+
+        function removeFavorite()
+
+    }
+
+
+    return <UserContext.Provider value={undefined}>{children}</UserContext.Provider>;
+};
