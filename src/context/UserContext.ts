@@ -23,12 +23,12 @@ export type UserContextType = { // contains all the context
     isInCart: (id: number, type: UserItem['type']) => boolean;
 }
 
-const USERNAME_KEY = "username_key"; // keys for fetching values from localStorage, names r lowkey arbitrary
-const FAVORITES_KEY = "favorites_key";
-const CART_KEY = "cart_key";
-const GENRES_KEY = "genres_key";
+export const USERNAME_KEY = "username_key"; // keys for fetching values from localStorage, names r lowkey arbitrary
+export const FAVORITES_KEY = "favorites_key";
+export const CART_KEY = "cart_key";
+export const GENRES_KEY = "genres_key";
 
-function load<Type>(key: string, backup: Type): Type { // to load any type from localStorage
+export function load<Type>(key: string, backup: Type): Type { // to load any type from localStorage
     const saved = localStorage.getItem(key); // get item is in localStorage
 
     if (!saved) {
@@ -46,7 +46,7 @@ function sameItem (x: UserItem, y: UserItem) { // checks if two items are the sa
     return x.id === y.id && x.type === y.type; // if same, must have same id and type
 }
 
-// export const UserContext = createContext<UserContextType | undefined>(undefined); // this is global and lets the entire site use the info.
+export const UserContext = createContext<UserContextType | undefined>(undefined); // this is global and lets the entire site use the info.
 
 //     return (
 //         <div>
