@@ -20,8 +20,8 @@ export type UserContextType = { // contains all the context
     setGenrePreferences: (preferences: number[]) => void; // takes array of selected genres' IDs
     removeFavorite: (id: number, type: UserItem['type']) => void; // when looking in existing list: need item's id + type because movie/tv can hv same id
     removeCart: (id: number, type: UserItem['type']) => void;
-    // isFavorite: (id: number, type: UserItem['type']) => boolean; // UserItem['variableInUserItemWithThisName']
-    // isInCart: (id: number, type: UserItem['type']) => boolean;
+    isFavorite: (id: number, type: UserItem['type']) => boolean; // UserItem['variableInUserItemWithThisName']
+    isCart: (id: number, type: UserItem['type']) => boolean;
 }
 
 export const USERNAME_KEY = "username_key"; // keys for fetching values from localStorage, names r lowkey arbitrary
@@ -69,7 +69,7 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
     const [username, setUsername] = useState(() => load(USERNAME_KEY, 'NoUsername')); // using states to save the changeable things.
     const [favorites, setFavorites] = useState<UserItem[]>(() => load(FAVORITES_KEY, [])); // favorites is an array. initially empty
     const [cart, setCart] = useState(() => load<UserItem[]>(CART_KEY, []));
-    const [genrePreferences, setGenrePreferences] = useState<UserItem[]>(() => load(GENRES_KEY, []));
+    const [genrePreferences, setGenrePreferences] = useState<number[]>(() => load(GENRES_KEY, []));
 
     useEffect (() => { // useEffect to store stuff into localStorage, with respective deps
         localStorage.setItem(USERNAME_KEY, JSON.stringify(username)) // must be stringified to put in localStorage
@@ -98,8 +98,7 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
         });
     }
 
-    function addCart(item: UserItem) { // must remove item if in cart, then add to favorites.
-       
+    function addCart(item: UserItem) { // must remove item if in cart, then add to favorites. 
         if (item.type === 'tv') { // cannot add tv's
             return;
         }
@@ -112,11 +111,41 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
                 return [...prev, item]; 
             }
         });
-
-        function removeFavorite()
-
     }
 
+    function removeFavorite(id: number, type: UserItem['type']) {
+        setFavorites((prev) => prev.filter((item) => item.id !== id || item.type !== type)); // filter: diff id | type = true (keep). same id & type = false
+    }
 
-    return <UserContext.Provider value={undefined}>{children}</UserContext.Provider>;
+    function removeCart(id: number, type: UserItem['type']) {
+        setCart((prev) => prev.filter((item) => item.id !== id || item.type !== type)); 
+    }
+
+    function isFavorite(id: number, type: UserItem['type']) {
+        return favorites.some((item) => item.id === id && item.type === type); // must have same id AND type.
+    }
+
+    function isCart(id: number, type: UserItem['type']) {
+        return cart.some((item) => item.id === id && item.type === type); // must have same id AND type.
+    }
+
+    return (
+        <UserContext.Provider 
+            value={{ // ts the stuff in UserContextType that's shared globally
+                username,
+                favorites,
+                cart,
+                genrePreferences,
+                addFavorite,
+                addCart,
+                setGenrePreferences,
+                removeFavorite,
+                removeCart,
+                isFavorite,
+                isCart,
+            }}
+        >
+            {children}
+        </UserContext.Provider>
+    );
 };
