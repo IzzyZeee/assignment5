@@ -8,6 +8,8 @@ type ImageGridProps = {
     secondaryText?: string;
   }>;
   onClick?: (id: number) => void;
+  onFavorite?: (id: number) => void;
+  onCart?: (id: number) => void;
 };
 
 export const ImageGrid = ({ results, onClick }: ImageGridProps) => {

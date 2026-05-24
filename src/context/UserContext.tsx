@@ -136,16 +136,13 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
             {children}
         </UserContext.Provider>
     );
-
-    
 };
 
-export function useUser() { // shortcut for use usercontext
+export function useUserContext() { // shortcut for use usercontext
     const context = useContext(UserContext);
 
     if (!context) {
-        throw new Error('useUser must be used inside UserProvider!');
+        throw new Error("useUserContext must be used within a StoreProvider");
     }
-
     return context;
-}
+};

@@ -1,4 +1,5 @@
 import { Button, ImageGrid, Pagination } from "@/components";
+import { useUserContext } from "@/context";
 import type { MoviesResponse } from "@/core/types";
 import { useTmdb } from "@/hooks";
 import { useState } from "react";
@@ -17,6 +18,8 @@ function movieListUrl(listKey: string) { // Uses listKey to get working URL to g
 }
 
 export const MovieCategoriesView = () => {
+
+    const { favorites, addCart, removeFavorite } = useUserContext();
 
     const { listKey } = useParams(); // To get whatever listKey is from router
     const navigate = useNavigate();
@@ -63,7 +66,6 @@ export const MovieCategoriesView = () => {
     return (
         <div className="p-10">
             <Outlet />
-            
             <ImageGrid results={gridData} onClick={(id) => navigate(`/movie/${id}`)} /> {/* ImageGrid already defined for us */}
             <div className="p-10">
                 <Pagination page={page} maxPages={data.total_pages} onClick={setPage} /> {/* Pagination already defined for us */}

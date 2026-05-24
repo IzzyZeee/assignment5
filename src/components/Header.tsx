@@ -1,9 +1,12 @@
 import { Link, SearchBar } from '@/components';
+import { useUserContext } from '@/context';
 import { useState } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 
-
 export const Header = () => {
+
+  const { username } = useUserContext();
+  
   const navigate = useNavigate();
   const location = useLocation(); 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -32,24 +35,32 @@ export const Header = () => {
     <header>
       <nav className="items-center flex gap-4 p-4 bg-zinc-800">
         <div>
-            <div className="mr-2">
-              <h1 className="text-3xl font-bold text-teal-500">TMDB</h1>
-              <h1 className="text-2xl font-bold text-white-900">Explorer</h1>
-            </div>
+          <div className="mr-2">
+            <h1 className="text-3xl font-bold text-teal-500">TMDB</h1>
+            <h1 className="text-2xl font-bold text-white-900">Explorer</h1>
           </div>
-       
-          <Link to="/movies/now_playing">Movies</Link>
-          <Link to="/tv/airing_today">TV</Link>
-          <Link to="/trending">Trending</Link>
-          <Link to="/genres/movie/28">Genre</Link>
-          <Link to="/search">Search</Link>
-          <Link to="/favorites">Favorites</Link>
-          {/* <Link to="/cart">Search</Link>
-          <Link to="/settings">Search</Link> */}
+        </div>
 
-          <div className="ml-auto">
-            <SearchBar value={search} onChange={useSearch} onSubmitSearch={doSearch} ></SearchBar>
+        <div>
+          <div className="flex gap-4">
+            <Link to="/movies/now_playing">Movies</Link>
+            <Link to="/tv/airing_today">TV</Link>
+            <Link to="/trending">Trending</Link>
+            <Link to="/genres/movie/28">Genre</Link>
+            <Link to="/search">Search</Link>
           </div>
+
+          <div className="flex gap-4 mt-4">
+            <p className="text">Welcome, {username}!</p>
+            <Link to="/favorites">Favorites</Link>
+            <Link to="/cart">Cart</Link>
+            {/* <Link to="/settings">Search</Link> */}
+          </div>
+        </div>
+
+        <div className="ml-auto">
+          <SearchBar value={search} onChange={useSearch} onSubmitSearch={doSearch} ></SearchBar>
+        </div>
       </nav>
     </header>
   );

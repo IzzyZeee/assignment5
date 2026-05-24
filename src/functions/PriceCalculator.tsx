@@ -1,6 +1,6 @@
-import { CURRENT_YEAR } from "@/core/constants";
+const CURRENT_YEAR = 2026;
 
-export const CalculatePrice = (year: number) => {
+export const getPrice = (year: number) => {
     let base = 19.99;
     let min = 4.99;
     let price = CURRENT_YEAR - year;
