@@ -70,7 +70,7 @@ export const App = () => {
 
           <Route path="/favorites" element={<FavoritesView />} />
           <Route path="/cart" element={<CartView />} />
-          {/* <Route path="/settings" element={<SettingsView />} />  */}
+          <Route path="/settings" element={<SettingsView />} /> 
 
         </Route>
 

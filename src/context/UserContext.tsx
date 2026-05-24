@@ -17,6 +17,7 @@ export type UserContextType = { // contains all the context
     genrePreferences: number[]; // array of numbers, the IDs for the selected preferred genres in settings
     addFavorite: (item: UserItem) => void; // function description for a function that is made later, takes/returns x and y
     addCart: (item: UserItem) => void; // takes a UserItem but function returns nothing
+    setUsername: (username: string) => void;
     setGenrePreferences: (preferences: number[]) => void; // takes array of selected genres' IDs
     removeFavorite: (id: number, type: UserItem['type']) => void; // when looking in existing list: need item's id + type because movie/tv can hv same id
     removeCart: (id: number, type: UserItem['type']) => void;
@@ -124,6 +125,7 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
                 favorites,
                 cart,
                 genrePreferences,
+                setUsername,
                 addFavorite,
                 addCart,
                 setGenrePreferences,

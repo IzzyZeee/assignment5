@@ -54,7 +54,7 @@ export const Header = () => {
             <p className="text">Welcome, {username}!</p>
             <Link to="/favorites">Favorites</Link>
             <Link to="/cart">Cart</Link>
-            {/* <Link to="/settings">Search</Link> */}
+            <Link to="/settings">Settings</Link>
           </div>
         </div>
 
