@@ -2,6 +2,10 @@ import { Link, SearchBar } from '@/components';
 import { useUserContext } from '@/context';
 import { useState } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
+import { FaHeart } from "react-icons/fa";
+import { FaGear } from "react-icons/fa6";
+import { IoCart } from "react-icons/io5";
+
 
 export const Header = () => {
 
@@ -51,14 +55,16 @@ export const Header = () => {
           </div>
 
           <div className="flex gap-4 mt-4">
-            <p className="text">Welcome, {username}!</p>
-            <Link to="/favorites">Favorites</Link>
-            <Link to="/cart">Cart</Link>
-            <Link to="/settings">Settings</Link>
+            <p className="text">Welcome, <span className="font-bold">{username}</span>!</p>
           </div>
         </div>
-
-        <div className="ml-auto">
+          
+        <div className="ml-auto flex">
+        <div className="flex gap-4 mr-6 mt-2 justify-end h-11">
+          <Link to="/favorites"><FaHeart className="mt-1"/></Link>
+          <Link to="/cart"><IoCart className="mt-1"/></Link>
+          <Link to="/settings"><FaGear className="mt-1"/></Link>
+        </div>
           <SearchBar value={search} onChange={useSearch} onSubmitSearch={doSearch} ></SearchBar>
         </div>
       </nav>

@@ -48,7 +48,7 @@ export const TelevisionCategoriesView = () => {
     return (
         <div className="p-10">
             <Outlet />
-                <ImageGrid results={gridData} onClick={(id) => navigate(`/tv/id/${id}`)} /> {/* ImageGrid already defined for us */}
+                <ImageGrid results={gridData} onClick={(id) => navigate(`/tv/id/${id}/seasons`)} /> {/* ImageGrid already defined for us */}
                 <div className="p-10">
                     <Pagination page={page} maxPages={data.total_pages} onClick={setPage} /> {/* Pagination already defined for us */}
                 </div>
