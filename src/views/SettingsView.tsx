@@ -1,4 +1,5 @@
 import { useUserContext } from "@/context";
+import { MOVIE_GENRES, TV_GENRES } from "@/core/constants";
 import { useState } from "react";
 import { Form } from "react-router-dom";
 
@@ -6,9 +7,12 @@ export const SettingsView = () => {
     
     const { username, setUsername } = useUserContext();
     
+    const movieGenres = MOVIE_GENRES.map((genre) => genre.id); // array with all genres
+    const tvGenres = TV_GENRES.map((genre) => genre.id);
+
     const [draftUsername, setDraftUsername] = useState(username);
-    const [moviePreferences, setMoviePreferences] = useState<number[]>([28, 12, 16, 80, 10751, 14, 36, 27, 9648, 878]);
-    const [tvPreferences, setTvPreferences] = useState<number[]>([10759, 16, 35, 99, 18, 10751, 10762, 9648, 10765]);
+    const [moviePreferences, setMoviePreferences] = useState<number[]>(movieGenres);
+    const [tvPreferences, setTvPreferences] = useState<number[]>(tvGenres);
 
     return (
         <section className="max-w-[1000px] mx-auto p-6 space-y-6 mb-20">
@@ -42,19 +46,34 @@ export const SettingsView = () => {
 
             <div className="mx-auto p-6 space-y-6 rounded-md bg-zinc-800 border border-zinc-700">
                 <h1 className="font-bold text-xl">Edit Genre Preferences</h1>
-                <div>
-                    <h1 className="mt-3 flex gap-4">Movies</h1>
-                    <ul>
-                        {moviePreferences.map(() => ( // genre prefernces should update the genre page to just have the genres you select. not other 3 pages
+                <div className="flex gap-4">
+                    <div className="mr-20">
+                        <h1 className="flex gap-4 text-teal-500 font-bold">Movies</h1>
+                        <ul>
+                            {moviePreferences.map((id) => (
+                                <li key={id}>
+                                <label className="flex gap-2 items-center">
+                                    <input type="checkbox" />
+                                    {MOVIE_GENRES.find((genre) => genre.id === id)?.label}
+                                </label>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
 
-
-
-                        ))}
-                    </ul>
-                </div>
-
-                <div>
-                    <h1 className="mt-3 flex gap-4">TV</h1>
+                    <div>
+                        <h1 className="flex gap-4 text-teal-500 font-bold">TV</h1>
+                        <ul>
+                            {tvPreferences.map((id) => (
+                                <li key={id}>
+                                <label className="flex gap-2 items-center">
+                                    <input type="checkbox" />
+                                    {TV_GENRES.find((genre) => genre.id === id)?.label}
+                                </label>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
