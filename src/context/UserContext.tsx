@@ -65,16 +65,10 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
     // const [moviePreferences, setMoviePreferences] = useState<number[]>(() => load(MOVIE_GENRES_KEY, []));
     // const [tvPreferences, setTvPreferences] = useState<number[]>(() => load(MOVIE_GENRES_KEY, []));
     const [moviePreferences, setMoviePreferences] = useState<number[]>(
-        () => load(
-            MOVIE_GENRES_KEY,
-            MOVIE_GENRES.map((genre) => genre.id)
-        )
+        () => load(MOVIE_GENRES_KEY, MOVIE_GENRES.map((genre) => genre.id))
     );
     const [tvPreferences, setTvPreferences] = useState<number[]>(
-        () => load(
-            TV_GENRES_KEY,
-            TV_GENRES.map((genre) => genre.id)
-        )
+        () => load(TV_GENRES_KEY, TV_GENRES.map((genre) => genre.id))
     );
 
     useEffect (() => { // useEffect to store stuff into localStorage, with respective deps

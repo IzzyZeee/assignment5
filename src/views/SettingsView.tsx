@@ -7,6 +7,7 @@ export const SettingsView = () => {
     
     const { username, setUsername, moviePreferences, setMoviePreferences, tvPreferences, setTvPreferences } = useUserContext();
     
+    
     const movieGenres = MOVIE_GENRES.map((genre) => genre.id); // array with all genres
     const tvGenres = TV_GENRES.map((genre) => genre.id);
 
