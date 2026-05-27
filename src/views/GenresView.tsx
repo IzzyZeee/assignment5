@@ -1,4 +1,5 @@
 import { ButtonGroup, ImageGrid, Pagination } from '@/components';
+import { useUserContext } from '@/context';
 import { MOVIE_DISCOVER_ENDPOINT, MOVIE_GENRES, TV_DISCOVER_ENDPOINT, TV_GENRES } from '@/core/constants';
 import type { MoviesResponse, TvsResponse } from '@/core/types';
 import { useTmdb } from '@/hooks';
@@ -6,6 +7,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 export const GenresView = () => {
+  const { moviePreferences, tvPreferences } = useUserContext();
   const { type, genre_id } = useParams();
   const genreList = type === 'movie' ? MOVIE_GENRES : TV_GENRES;
   const navigate = useNavigate();
@@ -18,7 +20,6 @@ export const GenresView = () => {
     { page, with_genres: Number(genre_id) },
     [page, interval, type, genre_id]
   );
-  console.log('hi', { MOVIE_DISCOVER_ENDPOINT });
 
   const gridData = (data?.results ?? []).map((result) => ({
     id: result.id,
@@ -48,15 +49,32 @@ export const GenresView = () => {
       </div>
 
       <div className="flex">
-        {genreList.map((g) => (
-          <Link
-            className="px-6 py-3 rounded-md transition-all duration-200 bg-zinc-800 text-white-900 m-1 hover:bg-zinc-900"
-            key={g.id}
-            to={`/genres/${type}/${g.id}`}
-          >
-            {g.label}
-          </Link>
-        ))}
+        {genreList.map((g) => {
+          if (type === 'movie' && moviePreferences.includes(g.id)) {
+            return ( 
+              <Link
+                className="px-6 py-3 rounded-md transition-all duration-200 bg-zinc-800 text-white-900 m-1 hover:bg-zinc-900"
+                key={g.id}
+                to={`/genres/movie/${g.id}`}
+              >
+                {g.label}
+              </Link>
+            );
+          }
+
+          if (type === 'tv' && tvPreferences.includes(g.id)) {
+            return (
+              <Link
+                className="px-6 py-3 rounded-md transition-all duration-200 bg-zinc-800 text-white-900 m-1 hover:bg-zinc-900"
+                key={g.id}
+                to={`/genres/tv/${g.id}`}
+              >
+                {g.label}
+              </Link>
+            );
+          }
+          return null;
+        })}
       </div>
 
       <ImageGrid results={gridData} onClick={(id) => navigate(type === 'movie' ? `/movie/${id}/credits` : `/tv/id/${id}/seasons`)} />

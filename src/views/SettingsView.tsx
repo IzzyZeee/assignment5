@@ -5,14 +5,32 @@ import { Form } from "react-router-dom";
 
 export const SettingsView = () => {
     
-    const { username, setUsername } = useUserContext();
+    const { username, setUsername, moviePreferences, setMoviePreferences, tvPreferences, setTvPreferences } = useUserContext();
     
     const movieGenres = MOVIE_GENRES.map((genre) => genre.id); // array with all genres
     const tvGenres = TV_GENRES.map((genre) => genre.id);
 
     const [draftUsername, setDraftUsername] = useState(username);
-    const [moviePreferences, setMoviePreferences] = useState<number[]>(movieGenres);
-    const [tvPreferences, setTvPreferences] = useState<number[]>(tvGenres);
+
+    function handleMovieChange(gId: number, checked: boolean) {
+        setMoviePreferences((prev) => {
+            if (checked) { // if checked
+                return [...prev, gId];
+            } else { // if not checked
+                return prev.filter((id) => id !== gId);
+            }
+        })
+    }
+
+    function handleTvChange(gId: number, checked: boolean) {
+        setTvPreferences((prev) => {
+            if (checked) {
+                return [...prev, gId];
+            } else {
+                return prev.filter((id) => id !== gId); 
+            }
+        })
+    }
 
     return (
         <section className="max-w-[1000px] mx-auto p-6 space-y-6 mb-20">
@@ -50,12 +68,21 @@ export const SettingsView = () => {
                     <div className="mr-20">
                         <h1 className="flex gap-4 text-teal-500 font-bold">Movies</h1>
                         <ul>
-                            {moviePreferences.map((id) => (
-                                <li key={id}>
-                                <label className="flex gap-2 items-center">
-                                    <input type="checkbox" />
-                                    {MOVIE_GENRES.find((genre) => genre.id === id)?.label}
-                                </label>
+                            {MOVIE_GENRES.map((genre) => (
+                                <li key={genre.id}>
+                                    <label className="flex gap-2 items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={moviePreferences.includes(genre.id)}
+                                            onChange={(e) =>
+                                                handleMovieChange(
+                                                    genre.id,
+                                                    e.target.checked
+                                                )
+                                            }
+                                        />
+                                        {genre.label}
+                                    </label>
                                 </li>
                             ))}
                         </ul>
@@ -64,12 +91,21 @@ export const SettingsView = () => {
                     <div>
                         <h1 className="flex gap-4 text-teal-500 font-bold">TV</h1>
                         <ul>
-                            {tvPreferences.map((id) => (
-                                <li key={id}>
-                                <label className="flex gap-2 items-center">
-                                    <input type="checkbox" />
-                                    {TV_GENRES.find((genre) => genre.id === id)?.label}
-                                </label>
+                            {TV_GENRES.map((genre) => (
+                                <li key={genre.id}>
+                                    <label className="flex gap-2 items-center">
+                                        <input
+                                            type="checkbox"
+                                            checked={tvPreferences.includes(genre.id)}
+                                            onChange={(e) =>
+                                                handleTvChange(
+                                                    genre.id,
+                                                    e.target.checked
+                                                )
+                                            }
+                                        />
+                                        {genre.label}
+                                    </label>
                                 </li>
                             ))}
                         </ul>

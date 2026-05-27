@@ -14,11 +14,13 @@ export type UserContextType = { // contains all the context
     username: string; // username you see on the top of screen ykyk
     favorites: UserItem[]; // array of UserItem types (basically all your favorites)
     cart: UserItem[];
-    genrePreferences: number[]; // array of numbers, the IDs for the selected preferred genres in settings
+    moviePreferences: number[]; // array of numbers, the IDs for the selected preferred genres in settings
+    tvPreferences: number[];
     addFavorite: (item: UserItem) => void; // function description for a function that is made later, takes/returns x and y
     addCart: (item: UserItem) => void; // takes a UserItem but function returns nothing
     setUsername: (username: string) => void;
-    setGenrePreferences: (preferences: number[]) => void; // takes array of selected genres' IDs
+    setMoviePreferences: (preferences: number[]) => void; // takes array of selected genres' IDs
+    setTvPreferences: (preferences: number[]) => void; // takes array of selected genres' IDs
     removeFavorite: (id: number, type: UserItem['type']) => void; // when looking in existing list: need item's id + type because movie/tv can hv same id
     removeCart: (id: number, type: UserItem['type']) => void;
     isFavorite: (id: number, type: UserItem['type']) => boolean; // UserItem['variableInUserItemWithThisName']
@@ -28,7 +30,8 @@ export type UserContextType = { // contains all the context
 export const USERNAME_KEY = "username_key"; // keys for fetching values from localStorage, names r lowkey arbitrary
 export const FAVORITES_KEY = "favorites_key";
 export const CART_KEY = "cart_key";
-export const GENRES_KEY = "genres_key";
+export const MOVIE_GENRES_KEY = "movie_genres_key";
+export const TV_GENRES_KEY = "tv_genres_key";
 
 export function load<Type>(key: string, backup: Type): Type { // to load any type from localStorage
     const saved = localStorage.getItem(key); // get item is in localStorage
@@ -55,10 +58,11 @@ type UserProviderProps = {
 };
 
 export const UserProvider = ({ children }: UserProviderProps) => { // stuff shared by the whole ahh website
-    const [username, setUsername] = useState(() => load(USERNAME_KEY, 'NoUsername')); // using states to save the changeable things.
+    const [username, setUsername] = useState(() => load(USERNAME_KEY, 'Username')); // using states to save the changeable things.
     const [favorites, setFavorites] = useState<UserItem[]>(() => load(FAVORITES_KEY, [])); // favorites is an array. initially empty
     const [cart, setCart] = useState(() => load<UserItem[]>(CART_KEY, []));
-    const [genrePreferences, setGenrePreferences] = useState<number[]>(() => load(GENRES_KEY, []));
+    const [moviePreferences, setMoviePreferences] = useState<number[]>(() => load(MOVIE_GENRES_KEY, []));
+    const [tvPreferences, setTvPreferences] = useState<number[]>(() => load(MOVIE_GENRES_KEY, []));
 
     useEffect (() => { // useEffect to store stuff into localStorage, with respective deps
         localStorage.setItem(USERNAME_KEY, JSON.stringify(username)) // must be stringified to put in localStorage
@@ -73,8 +77,12 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
     }, [cart]);
     
     useEffect (() => {  
-        localStorage.setItem(GENRES_KEY, JSON.stringify(genrePreferences)) 
-    }, [genrePreferences]);
+        localStorage.setItem(MOVIE_GENRES_KEY, JSON.stringify(moviePreferences)) 
+    }, [moviePreferences]);    
+    
+    useEffect (() => {  
+        localStorage.setItem(TV_GENRES_KEY, JSON.stringify(tvPreferences)) 
+    }, [tvPreferences]);
 
     function addFavorite(item: UserItem) { // must remove item if in cart, then add to favorites.
         setCart((prev) => prev.filter((cartItem) => !sameItem(cartItem, item))); // filter only keeps TRUE items (if NOT the same item, then keep)
@@ -124,11 +132,13 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
                 username,
                 favorites,
                 cart,
-                genrePreferences,
+                moviePreferences,
+                tvPreferences,
                 setUsername,
                 addFavorite,
                 addCart,
-                setGenrePreferences,
+                setMoviePreferences,
+                setTvPreferences,
                 removeFavorite,
                 removeCart,
                 isFavorite,
