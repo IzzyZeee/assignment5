@@ -1,3 +1,4 @@
+import { MOVIE_GENRES, TV_GENRES } from "@/core/constants";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 // import { UserContext } from "@/context";
 
@@ -19,8 +20,8 @@ export type UserContextType = { // contains all the context
     addFavorite: (item: UserItem) => void; // function description for a function that is made later, takes/returns x and y
     addCart: (item: UserItem) => void; // takes a UserItem but function returns nothing
     setUsername: (username: string) => void;
-    setMoviePreferences: (preferences: number[]) => void; // takes array of selected genres' IDs
-    setTvPreferences: (preferences: number[]) => void; // takes array of selected genres' IDs
+    setMoviePreferences: React.Dispatch<React.SetStateAction<number[]>>; // takes array of selected genres' IDs
+    setTvPreferences: React.Dispatch<React.SetStateAction<number[]>>; // takes array of selected genres' IDs
     removeFavorite: (id: number, type: UserItem['type']) => void; // when looking in existing list: need item's id + type because movie/tv can hv same id
     removeCart: (id: number, type: UserItem['type']) => void;
     isFavorite: (id: number, type: UserItem['type']) => boolean; // UserItem['variableInUserItemWithThisName']
@@ -61,8 +62,20 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
     const [username, setUsername] = useState(() => load(USERNAME_KEY, 'Username')); // using states to save the changeable things.
     const [favorites, setFavorites] = useState<UserItem[]>(() => load(FAVORITES_KEY, [])); // favorites is an array. initially empty
     const [cart, setCart] = useState(() => load<UserItem[]>(CART_KEY, []));
-    const [moviePreferences, setMoviePreferences] = useState<number[]>(() => load(MOVIE_GENRES_KEY, []));
-    const [tvPreferences, setTvPreferences] = useState<number[]>(() => load(MOVIE_GENRES_KEY, []));
+    // const [moviePreferences, setMoviePreferences] = useState<number[]>(() => load(MOVIE_GENRES_KEY, []));
+    // const [tvPreferences, setTvPreferences] = useState<number[]>(() => load(MOVIE_GENRES_KEY, []));
+    const [moviePreferences, setMoviePreferences] = useState<number[]>(
+        () => load(
+            MOVIE_GENRES_KEY,
+            MOVIE_GENRES.map((genre) => genre.id)
+        )
+    );
+    const [tvPreferences, setTvPreferences] = useState<number[]>(
+        () => load(
+            TV_GENRES_KEY,
+            TV_GENRES.map((genre) => genre.id)
+        )
+    );
 
     useEffect (() => { // useEffect to store stuff into localStorage, with respective deps
         localStorage.setItem(USERNAME_KEY, JSON.stringify(username)) // must be stringified to put in localStorage
