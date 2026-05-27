@@ -27,7 +27,7 @@ export const CartView = () => {
             <h1 className="text-400 text-zinc-500">Your cart is empty!</h1>
         ) : (
             <div className="space-y-4">
-            <h1 className="text-400 text-zinc-500">Total: {cart.reduce((sum, item) => sum + getPrice(item.release), 0)} </h1>
+            <h1 className="text-400 text-zinc-500">Total: {cart.reduce((sum, item) => sum + getPrice(item.release), 0)}</h1>
             {cart.map((item) => (
                 <div key={`${item.type}-${item.id}`} className="flex gap-4 bg-zinc-800 rounded-xl p-4 items-center">
                 <img className="w-[80px] h-[120px] object-cover rounded-lg" src={`${IMAGE_BASE_URL}${item.imagePath}`} />
