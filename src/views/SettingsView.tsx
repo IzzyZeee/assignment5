@@ -7,7 +7,6 @@ export const SettingsView = () => {
     
     const { username, setUsername, moviePreferences, setMoviePreferences, tvPreferences, setTvPreferences } = useUserContext();
     
-    
     const movieGenres = MOVIE_GENRES.map((genre) => genre.id); // array with all genres
     const tvGenres = TV_GENRES.map((genre) => genre.id);
 
@@ -68,7 +67,7 @@ export const SettingsView = () => {
                 <div className="flex gap-4">
                     <div className="mr-20">
                         <h1 className="flex gap-4 text-teal-500 font-bold">Movies</h1>
-                        <ul>
+                        <ul className="mb-4">
                             {MOVIE_GENRES.map((genre) => (
                                 <li key={genre.id}>
                                     <label className="flex gap-2 items-center">
@@ -87,11 +86,19 @@ export const SettingsView = () => {
                                 </li>
                             ))}
                         </ul>
+                        <label className="p-2 mt-2 rounded-md bg-teal-600 border border-teal-400 hover:bg-teal-400">
+                            <button 
+                                onClick={(e) =>
+                                    setMoviePreferences(MOVIE_GENRES.map((genre) => genre.id))
+                                }
+                            />
+                            Select All
+                        </label>
                     </div>
 
                     <div>
                         <h1 className="flex gap-4 text-teal-500 font-bold">TV</h1>
-                        <ul>
+                        <ul className="mb-4">
                             {TV_GENRES.map((genre) => (
                                 <li key={genre.id}>
                                     <label className="flex gap-2 items-center">
@@ -110,6 +117,14 @@ export const SettingsView = () => {
                                 </li>
                             ))}
                         </ul>
+                        <label className="p-2 mt-2 rounded-md bg-teal-600 border border-teal-400 hover:bg-teal-400">
+                            <button 
+                                onClick={(e) =>
+                                    setTvPreferences(TV_GENRES.map((genre) => genre.id))
+                                }
+                            />
+                            Select All
+                        </label>
                     </div>
                 </div>
             </div>

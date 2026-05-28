@@ -2,7 +2,8 @@ import { ButtonGroup, ImageGrid, Pagination } from '@/components';
 import { MOVIE_DISCOVER_ENDPOINT, MOVIE_GENRES, TV_DISCOVER_ENDPOINT, TV_GENRES } from '@/core/constants';
 import type { MoviesResponse, TvsResponse } from '@/core/types';
 import { useTmdb } from '@/hooks';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import {useUserContext} from '@/context';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 export const GenresView = () => {
@@ -12,6 +13,21 @@ export const GenresView = () => {
   const [page, setPage] = useState<number>(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const interval = searchParams.get('interval') || 'day';
+
+  const { moviePreferences, tvPreferences } = useUserContext();
+  const preferences = type === 'movie' ? moviePreferences : tvPreferences;
+  const filteredGenreList = genreList.filter((g) => preferences.includes(g.id));
+
+  useEffect(() => {
+    if (!type) return;
+    if (filteredGenreList.length === 0) return;
+    if (!preferences.includes(Number(genre_id))) {
+      navigate(`/genres/${type}/${filteredGenreList[0].id}`, { replace: true });
+      setPage(1);
+    }
+  }, [type, genre_id, preferences, filteredGenreList, navigate]);
+
+
 
   const { data } = useTmdb<MoviesResponse | TvsResponse>(
     `${type === 'movie' ? MOVIE_DISCOVER_ENDPOINT : TV_DISCOVER_ENDPOINT}`,
@@ -42,13 +58,14 @@ export const GenresView = () => {
           ]}
           onClick={(value) => {
             setPage(1); // resets page when switching
-            navigate(type === 'tv' ? `/genres/${value}/28` : `/genres/${value}/10759`);
+            const nextPrefs = value === 'movie' ? moviePreferences : tvPreferences;
+            navigate(`/genres/${value}/${nextPrefs[0]}`);
           }}
         />
       </div>
 
       <div className="flex">
-        {genreList.map((g) => (
+        {filteredGenreList.map((g) => (
           <Link
             className="px-6 py-3 rounded-md transition-all duration-200 bg-zinc-800 text-white-900 m-1 hover:bg-zinc-900"
             key={g.id}
@@ -59,7 +76,7 @@ export const GenresView = () => {
         ))}
       </div>
 
-      <ImageGrid results={gridData} onClick={(id) => navigate(type === 'movie' ? `/movie/${id}/credits` : `/tv/id/${id}/seasons`)} />
+      <ImageGrid results={gridData} onClick={(id) => navigate(type === 'movie' ? `/movie/${id}/credits` : `/tv/${id}/seasons`)} />
       <Pagination page={page} maxPages={data.total_pages} onClick={setPage} />
     </section>
   );
