@@ -20,7 +20,9 @@ export const GenresView = () => {
 
   useEffect(() => {
     if (!type) return;
+
     if (filteredGenreList.length === 0) return;
+    
     if (!preferences.includes(Number(genre_id))) {
       navigate(`/genres/${type}/${filteredGenreList[0].id}`, { replace: true });
       setPage(1);
