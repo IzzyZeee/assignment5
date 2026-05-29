@@ -1,5 +1,5 @@
 import { Button, ImageGrid, Pagination } from "@/components";
-import { useUserContext } from "@/context";
+import { useUserContext, type UserItem } from "@/context";
 import type { MoviesResponse } from "@/core/types";
 import { useTmdb } from "@/hooks";
 import { useState } from "react";
@@ -19,7 +19,7 @@ function movieListUrl(listKey: string) { // Uses listKey to get working URL to g
 
 export const MovieCategoriesView = () => {
 
-    const { favorites, addCart, removeFavorite } = useUserContext();
+    const { favorites, addFavorite, addCart, removeFavorite, removeCart, isFavorite, isCart } = useUserContext();
 
     const { listKey } = useParams(); // To get whatever listKey is from router
     const navigate = useNavigate();
@@ -57,16 +57,44 @@ export const MovieCategoriesView = () => {
         )
     }
 
-    const gridData = data.results.map((result) => ({ // Map will go through every item in the array (each movie)
+    const movieResults = data.results;
+
+    const gridData = movieResults.map((result) => ({ // Map will go through every item in the array (each movie)
         id: result.id,
         imagePath: result.poster_path,
         primaryText: result.original_title ?? 'Untitled',
     }));
 
+    function findMovie(id: number): UserItem | undefined {
+        const movie = movieResults.find((result) => result.id === id);
+
+
+    }
+
     return (
         <div className="p-10">
             <Outlet />
-            <ImageGrid results={gridData} onClick={(id) => navigate(`/movie/${id}`)} /> {/* ImageGrid already defined for us */}
+            <ImageGrid results={gridData} onClick={(id) => navigate(`/movie/${id}`)} 
+                onFavorite={(id) => {
+                    if (isFavorite(id, 'movie')) {
+                        removeFavorite(id, 'movie');
+                        return;
+                    }
+
+                    const movie = findMovie(id);
+                    if (movie) {
+                        addFavorite(movie);
+                    }
+
+
+
+                }}      
+                
+                
+                
+                
+                
+            /> {/* ImageGrid already defined for us */}
             <div className="p-10">
                 <Pagination page={page} maxPages={data.total_pages} onClick={setPage} /> {/* Pagination already defined for us */}
             </div>
