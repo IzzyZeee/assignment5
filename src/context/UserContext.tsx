@@ -111,6 +111,11 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
         if (item.type === 'tv') { // cannot add tv's
             return;
         }
+
+        if (isCart(item.id, item.type)) {
+            removeCart(item.id, item.type);
+            return;
+        }
        
         setFavorites((prev) => prev.filter((cartItem) => !sameItem(cartItem, item)));
         setCart((prev) => {

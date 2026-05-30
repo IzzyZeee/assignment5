@@ -1,8 +1,11 @@
-import { LinkGroup, Modal } from '@/components';
+import { Button, LinkGroup, Modal } from '@/components';
+import { useUserContext } from '@/context';
 import { IMAGE_BASE_URL, MOVIE_ENDPOINT, ORIGINAL_IMAGE_BASE_URL } from '@/core/constants';
 import type { MovieResponse } from '@/core/types';
+import { getYear } from '@/functions/PriceCalculator';
 import { useTmdb } from '@/hooks';
 import { FaCalendarAlt } from 'react-icons/fa';
+import { IoCart } from 'react-icons/io5';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 
 export const MovieView = () => {
@@ -13,6 +16,20 @@ export const MovieView = () => {
   if (!data) {
     return <p className="text-center text-gray-400">Could not find content.</p>;
   }
+
+  const { moviePreferences, tvPreferences, isCart, addCart } = useUserContext();
+  
+  const movieItem = {
+    id: data.id,
+    type: 'movie' as const,
+    title: data.title,
+    imagePath: data.poster_path,
+    release: getYear(data.release_date),
+  }
+
+  // function addCart(): void {
+  //   throw new Error('Function not implemented.');
+  // }
 
   return (
     <Modal onClose={() => navigate(-1)}>
@@ -33,6 +50,13 @@ export const MovieView = () => {
             </p>
             <p className="text-gray-300">{data.overview}</p>
             
+            <Button 
+              onClick={() => addCart(movieItem)}
+              variant={isCart(data.id, 'movie') ? 'primary' : 'grey'}
+            >
+              <IoCart />
+            </Button>
+
             <LinkGroup
               options={[
                 { label: 'Credits', to: 'credits' },

@@ -10,7 +10,7 @@ type SearchKind = 'movie' | 'tv' | 'person';
 
 export const Header = () => {
 
-  const { username, favorites } = useUserContext();
+  const { username, favorites, cart } = useUserContext();
   
   const navigate = useNavigate();
   const location = useLocation(); 
@@ -76,7 +76,14 @@ export const Header = () => {
               </div>
             }
           </Link>
-          <Link to="/cart"><IoCart className="mt-1"/></Link>
+          <Link to="/cart">
+            <IoCart className="mt-1"/>
+            {cart.length > 0 &&
+              <div className="relative inline-flex rounded-full p-1 bottom-10 left-6 bg-teal-600">
+                <p className="text-xs">{cart.length}</p>
+              </div>
+            }
+          </Link>
           <Link to="/settings"><FaGear className="mt-1"/></Link>
         </div>
           <SearchBar value={search} onChange={useSearch} onSubmitSearch={doSearch} ></SearchBar>
