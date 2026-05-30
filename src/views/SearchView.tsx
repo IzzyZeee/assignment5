@@ -50,7 +50,6 @@ export const SearchView = () => {
       title: movieById?.title ?? movieById.original_title ?? "Untitled",
       imagePath: movieById.poster_path,
       release: getYear(movieById?.release_date),
-
     }
   }
 

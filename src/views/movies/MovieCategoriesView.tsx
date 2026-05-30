@@ -1,6 +1,7 @@
 import { Button, ImageGrid, Pagination } from "@/components";
 import { useUserContext, type UserItem } from "@/context";
 import type { MoviesResponse } from "@/core/types";
+import { getPrice, getYear } from "@/functions/PriceCalculator";
 import { useTmdb } from "@/hooks";
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
@@ -25,7 +26,7 @@ export const MovieCategoriesView = () => {
     const navigate = useNavigate();
     const [page, setPage] = useState(1); // To get the page you're on - default, begins at 1 (for Pagination below)
     const valid = listKey && listKey in LABELS; // Validity check, listKey mustn't be blank + be in LABELS
-
+      
     if (!valid) { // If the listKey doesn't exist (fake loading screen lol)
 
     return (
@@ -59,41 +60,42 @@ export const MovieCategoriesView = () => {
 
     const movieResults = data.results;
 
-    const gridData = movieResults.map((result) => ({ // Map will go through every item in the array (each movie)
+    const gridData = (movieResults).map((result) => ({
         id: result.id,
-        imagePath: result.poster_path,
-        primaryText: result.original_title ?? 'Untitled',
+        imagePath: result.poster_path ?? null,
+        primaryText: result.title,
+        priceText: getPrice(getYear(result.release_date)),
     }));
 
-    function findMovie(id: number): UserItem | undefined {
-        const movie = movieResults.find((result) => result.id === id);
+    function findMovie(id: number): UserItem | undefined { 
+        const movieById = movieResults.find((item) => item.id === id);
+        
+        if (!movieById) {
+            return undefined;
+        }
 
-
+        return {
+            id: movieById?.id,
+            type: 'movie',
+            title: movieById?.title ?? movieById.original_title ?? "Untitled",
+            imagePath: movieById.poster_path,
+            release: getYear(movieById?.release_date),
+        }
     }
 
     return (
         <div className="p-10">
             <Outlet />
-            <ImageGrid results={gridData} onClick={(id) => navigate(`/movie/${id}`)} 
+            <ImageGrid 
+                results={gridData} 
+                onClick={(id) => navigate(`/movie/${id}`)}
                 onFavorite={(id) => {
-                    if (isFavorite(id, 'movie')) {
-                        removeFavorite(id, 'movie');
-                        return;
+                    const movieById = findMovie(id);
+                    if (movieById) {
+                    addFavorite(movieById);
                     }
-
-                    const movie = findMovie(id);
-                    if (movie) {
-                        addFavorite(movie);
-                    }
-
-
-
-                }}      
-                
-                
-                
-                
-                
+                }}
+                isFavorite={(id) => isFavorite(id, 'movie')}
             /> {/* ImageGrid already defined for us */}
             <div className="p-10">
                 <Pagination page={page} maxPages={data.total_pages} onClick={setPage} /> {/* Pagination already defined for us */}

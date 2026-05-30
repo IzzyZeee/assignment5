@@ -3,6 +3,9 @@ export type MoviesResponse = {
     id: number;
     original_title: string;
     poster_path: string;
+    title?: string;
+    first_air_ate?: string;
+    release_date?: string;
   }>;
   total_pages: number;
 };
