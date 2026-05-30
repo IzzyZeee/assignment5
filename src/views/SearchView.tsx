@@ -1,6 +1,8 @@
 import { ImageGrid, Pagination, SearchBar } from '@/components';
+import { useUserContext, type UserContextType, type UserItem } from '@/context';
 import { MULTISEARCH_ENDPOINT } from '@/core/constants';
 import type { MultiSearchResponse } from '@/core/types';
+import { getYear } from '@/functions/PriceCalculator';
 import { useDebounce, useTmdb } from '@/hooks';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -13,11 +15,13 @@ export const SearchView = () => {
   const [page, setPage] = useState<number>(1);
   const type = searchParams.get('type');
 
+  const { addFavorite, removeFavorite, isFavorite } = useUserContext();
+
   useEffect(() => {
     setPage(1);
   }, [queryFromUrl, type]);
 
-  // const debouncedQuery = useDebounce(query, 500);
+  const debouncedQuery = useDebounce(query, 500);
   
   useEffect(() => {
     setPage(1);
@@ -33,15 +37,39 @@ export const SearchView = () => {
     secondaryText: result.media_type,
   }));
 
+  function findMovie(id: number): UserItem | undefined { 
+    const movieById = results.find((item) => item.id === id && item.media_type === 'movie');
+    if (!movieById) {
+      return undefined;
+    }
+
+    return {
+      id: movieById?.id,
+      type: 'movie',
+      title: movieById?.title ?? movieById?.original_title ?? "untitled",
+      release: getYear(movieById?.release_date),
+      
+    }
+  }
+
   if (!data) {
     return <p className="text-center text-gray-400">Loading...</p>;
   }
 
   return (
     <section className="max-w-[1200px] mx-auto p-10 space-y-5">
-      {/* <SearchBar value={query} onChange={setQuery} /> */}
       <h1>Search for: <span className="font-bold">{queryFromUrl}</span></h1>
-      <ImageGrid results={gridData} />
+      <ImageGrid 
+        results={gridData} 
+        onFavorite={
+          type === 'movie' ? (id) => {
+            const movieById = findMovie(id);
+            if (movieById) {
+              addFavorite(movieById);
+            }
+          } : undefined
+        }
+      />
       {data.results.length ? (
         <Pagination page={page} maxPages={data.total_pages} onClick={setPage} />
       ) : (

@@ -26,17 +26,17 @@ export const ImageGrid = ({ results, onClick, onFavorite, onCart, isFavorite, is
           className="block bg-zinc-800 rounded-lg overflow-hidden cursor-pointer hover:scale-[1.02] transition"
           onClick={() => onClick?.(result.id)}
         >
-          <div className="absolute"> 
+          <div className="absolute top-2 right-2 z-10 flex gap-2"> 
             {onFavorite && (
               <button
                 type="button"
-                className=""
+                className="w-8 h-8 rounded-[100px] opacity-50 bg-black"
                 onClick={(event) => {
                   event.stopPropagation();
                   onFavorite(result.id);
                 }}
               >
-                <FaHeart />
+                <FaHeart className="ml-2"/>
               </button>
             )}
             {onCart && (

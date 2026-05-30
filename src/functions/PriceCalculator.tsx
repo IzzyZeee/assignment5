@@ -6,3 +6,7 @@ export const getPrice = (year: number) => {
     let price = CURRENT_YEAR - year;
     return base - price < min ? min : (base - price).toFixed(2);
 }
+
+export const getYear = (release: string) => {
+    return Number(release.substring(0, 4));
+}
