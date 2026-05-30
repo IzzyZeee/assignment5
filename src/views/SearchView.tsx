@@ -11,20 +11,22 @@ export const SearchView = () => {
   const queryFromUrl = searchParams.get('q') ?? '';
   const [query, setQuery] = useState('');
   const [page, setPage] = useState<number>(1);
+  const type = searchParams.get('type');
 
   useEffect(() => {
-    setQuery(queryFromUrl);
-  }, [queryFromUrl]);
+    setPage(1);
+  }, [queryFromUrl, type]);
 
-  const debouncedQuery = useDebounce(query, 500);
+  // const debouncedQuery = useDebounce(query, 500);
   
   useEffect(() => {
     setPage(1);
   }, [debouncedQuery]);
 
-  const { data } = useTmdb<MultiSearchResponse>(MULTISEARCH_ENDPOINT, { query: debouncedQuery, page }, [debouncedQuery, page]);
+  const { data } = useTmdb<MultiSearchResponse>(MULTISEARCH_ENDPOINT, { query: queryFromUrl, page }, [queryFromUrl, page]);
+  const results = (data?.results ?? []).filter((result) => result.media_type === type); // to filter all data ONLY type of selected button
 
-  const gridData = (data?.results ?? []).map((result) => ({
+  const gridData = (results).map((result) => ({
     id: result.id,
     imagePath: (result.media_type === 'person' ? result.profile_path ?? null : result.poster_path ?? null),
     primaryText: result.name,
@@ -37,7 +39,8 @@ export const SearchView = () => {
 
   return (
     <section className="max-w-[1200px] mx-auto p-10 space-y-5">
-      <SearchBar value={query} onChange={setQuery} />
+      {/* <SearchBar value={query} onChange={setQuery} /> */}
+      <h1>Search for: <span className="font-bold">{queryFromUrl}</span></h1>
       <ImageGrid results={gridData} />
       {data.results.length ? (
         <Pagination page={page} maxPages={data.total_pages} onClick={setPage} />

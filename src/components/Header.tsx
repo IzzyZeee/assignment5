@@ -1,4 +1,4 @@
-import { Link, SearchBar } from '@/components';
+import { Button, Link, SearchBar } from '@/components';
 import { useUserContext } from '@/context';
 import { useState } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
@@ -6,6 +6,7 @@ import { FaHeart } from "react-icons/fa";
 import { FaGear } from "react-icons/fa6";
 import { IoCart } from "react-icons/io5";
 
+type SearchKind = 'movie' | 'tv' | 'person';
 
 export const Header = () => {
 
@@ -18,6 +19,7 @@ export const Header = () => {
 
   const onSearchPage = location.pathname === '/search'; // is the current link on search page? 
   const search = onSearchPage ? (searchParams.get('q') ?? '') : draft;
+  const searchKind = searchParams.get('type'); // get type from url
 
   const useSearch = (value: string) => {
     if (onSearchPage) {
@@ -33,6 +35,11 @@ export const Header = () => {
     if (!onSearchPage) {
       setDraft('');
     }
+  }
+
+  const changeSearchKind = (searchType) => { 
+    const source = (onSearchPage ? search : draft).trim();
+    navigate({pathname: '/search', search: `?type=${searchType}&q=${encodeURIComponent(source)}`}) 
   }
 
   return (
@@ -66,6 +73,18 @@ export const Header = () => {
           <Link to="/settings"><FaGear className="mt-1"/></Link>
         </div>
           <SearchBar value={search} onChange={useSearch} onSubmitSearch={doSearch} ></SearchBar>
+          <div className="flex">
+            <div className="m-2">
+              <Button variant={searchKind === 'movie' ? 'primary' : 'grey'} onClick={() => changeSearchKind('movie')}>Movies</Button>
+            </div>
+            <div className="m-2">
+              <Button variant={searchKind === 'tv' ? 'primary' : 'grey'} onClick={() => changeSearchKind('tv')}>TV</Button>
+            </div>
+            <div className="m-2">
+              <Button variant={searchKind === 'person' ? 'primary' : 'grey'} onClick={() => changeSearchKind('person')}>People</Button>
+            </div>
+            
+          </div>
         </div>
       </nav>
     </header>
