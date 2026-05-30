@@ -10,7 +10,7 @@ type SearchKind = 'movie' | 'tv' | 'person';
 
 export const Header = () => {
 
-  const { username } = useUserContext();
+  const { username, favorites } = useUserContext();
   
   const navigate = useNavigate();
   const location = useLocation(); 
@@ -68,7 +68,14 @@ export const Header = () => {
           
         <div className="ml-auto flex">
         <div className="flex gap-4 mr-6 mt-2 justify-end h-11">
-          <Link to="/favorites"><FaHeart className="mt-1"/></Link>
+          <Link to="/favorites">
+            <FaHeart className="mt-1"/>
+            {favorites.length > 0 &&
+              <div className="relative inline-flex rounded-full p-1 bottom-10 left-6 bg-teal-600">
+                <p className="text-xs">{favorites.length}</p>
+              </div>
+            }
+          </Link>
           <Link to="/cart"><IoCart className="mt-1"/></Link>
           <Link to="/settings"><FaGear className="mt-1"/></Link>
         </div>
