@@ -23,14 +23,14 @@ export const ImageGrid = ({ results, onClick, onFavorite, onCart, isFavorite, is
       {results.map((result) => (
         <div
           key={result.id}
-          className="block bg-zinc-800 rounded-lg overflow-hidden cursor-pointer hover:scale-[1.02] transition"
+          className="relative block bg-zinc-800 rounded-lg overflow-hidden cursor-pointer hover:scale-[1.02] transition"
           onClick={() => onClick?.(result.id)}
         >
           <div className="absolute top-2 right-2 z-10 flex gap-2"> 
             {onFavorite && (
               <button
                 type="button"
-                className="w-8 h-8 rounded-[100px] opacity-50 bg-black"
+                className={`w-8 h-8 rounded-[100px] bg-black ${isFavorite?.(result.id) ? 'text-teal-500' : 'opacity-50text-white'}`}
                 onClick={(event) => {
                   event.stopPropagation();
                   onFavorite(result.id);
@@ -55,7 +55,7 @@ export const ImageGrid = ({ results, onClick, onFavorite, onCart, isFavorite, is
 
           <div className="relative">
             <img className="w-full h-[280px] object-cover" src={`${IMAGE_BASE_URL}${result.imagePath}`} alt={result.primaryText} />
-            {result.priceText && <div className="">{result.priceText}</div>}
+            {result.priceText && <div className="m-2 font-bold text-teal-400">{result.priceText}</div>}
           </div>
           
           <div className="p-3 text-center">

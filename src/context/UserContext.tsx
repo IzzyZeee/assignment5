@@ -92,6 +92,11 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
     }, [tvPreferences]);
 
     function addFavorite(item: UserItem) { // must remove item if in cart, then add to favorites.
+        if (isFavorite(item.id, item.type)) {
+            removeFavorite(item.id, item.type);
+            return;
+        }
+
         setCart((prev) => prev.filter((cartItem) => !sameItem(cartItem, item))); // filter only keeps TRUE items (if NOT the same item, then keep)
         setFavorites((prev) => {
             if (prev.some((currentItem) => sameItem(currentItem, item))) { 

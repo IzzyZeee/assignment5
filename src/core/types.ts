@@ -116,6 +116,10 @@ export type MultiSearchResponse = {
     id: number;
     name: string;
     media_type: string;
+    title?: string;
+    original_title?: string;
+    first_air_ate?: string;
+    release_date?: string;
     profile_path: string | null;
     poster_path: string | null;
   }>;
