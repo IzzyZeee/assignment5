@@ -3,8 +3,9 @@ import { MOVIE_DISCOVER_ENDPOINT, MOVIE_GENRES, TV_DISCOVER_ENDPOINT, TV_GENRES 
 import type { MoviesResponse, TvsResponse } from '@/core/types';
 import { useTmdb } from '@/hooks';
 import { useEffect, useState } from 'react';
-import {useUserContext} from '@/context';
+import {useUserContext, type UserItem} from '@/context';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { calculatePrice, getDisplayPrice, getYear } from '@/functions/PriceCalculator';
 
 export const GenresView = () => {
   const { type, genre_id } = useParams();
@@ -14,7 +15,7 @@ export const GenresView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const interval = searchParams.get('interval') || 'day';
 
-  const { moviePreferences, tvPreferences } = useUserContext();
+  const { favorites, addFavorite, addCart, removeFavorite, removeCart, isFavorite, isCart, moviePreferences, tvPreferences } = useUserContext();
   const preferences = type === 'movie' ? moviePreferences : tvPreferences;
   const filteredGenreList = genreList.filter((g) => preferences.includes(g.id));
 
@@ -29,7 +30,20 @@ export const GenresView = () => {
     }
   }, [type, genre_id, preferences, filteredGenreList, navigate]);
 
+  function findMovie(id: number) : UserItem | undefined {
+    const movieById = data?.results.find((item) => item.id === id);
+    if (!movieById) { 
+      return undefined;
+    }
 
+    return {
+        id: movieById?.id,
+        type: 'movie',
+        title: movieById?.title ?? movieById.original_title ?? "Untitled",
+        imagePath: movieById.poster_path,
+        release: getYear(movieById?.release_date),
+      }
+  }
 
   const { data } = useTmdb<MoviesResponse | TvsResponse>(
     `${type === 'movie' ? MOVIE_DISCOVER_ENDPOINT : TV_DISCOVER_ENDPOINT}`,
@@ -42,6 +56,7 @@ export const GenresView = () => {
     id: result.id,
     imagePath: result.poster_path,
     primaryText: ('original_title' in result ? result.original_title : result.name) ?? 'Untitled',
+    priceText: type === 'movie' && 'release_date' in result ? getDisplayPrice(calculatePrice(getYear(result.release_date))) : undefined,
   }));
 
   if (!data) {
@@ -51,7 +66,6 @@ export const GenresView = () => {
   return (
     <section className="max-w-[1200px] mx-auto p-5 space-y-5 mb-14">
       <div className="flex items-center justify-between mb-4">
-        <h1 className="text-3xl font-bold">Now Playing</h1>
         <ButtonGroup
           value={type}
           options={[
@@ -78,7 +92,18 @@ export const GenresView = () => {
         ))}
       </div>
 
-      <ImageGrid results={gridData} onClick={(id) => navigate(type === 'movie' ? `/movie/${id}/credits` : `/tv/${id}/seasons`)} />
+      <ImageGrid 
+        results={gridData} 
+        onClick={(id) => navigate(type === 'movie' ? `/movie/${id}/credits` : `/tv/id/${id}/seasons`)} 
+        onFavorite={
+          type === 'movie' ? (id) => {
+            addFavorite(findMovie(id));
+          } : undefined
+        }
+        isFavorite={
+          type === 'movie' ? (id) => isFavorite(id, 'movie') : undefined
+        }
+      />
       <Pagination page={page} maxPages={data.total_pages} onClick={setPage} />
     </section>
   );
