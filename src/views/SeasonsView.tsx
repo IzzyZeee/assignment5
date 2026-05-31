@@ -11,7 +11,7 @@ export const SeasonsView = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
-    const { favorites, addFavorite, addCart, removeFavorite, removeCart, isFavorite, isCart } = useUserContext();
+    const { addFavorite, addCart, isFavorite, isCart } = useUserContext();
 
     const { data } = useTmdb<SeasonsResponse>(`${TV_ENDPOINT}/${id}`, { page: 1 }, [id]); // Get data from TMDB
 

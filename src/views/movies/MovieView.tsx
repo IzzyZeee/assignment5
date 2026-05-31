@@ -17,7 +17,7 @@ export const MovieView = () => {
     return <p className="text-center text-gray-400">Could not find content.</p>;
   }
 
-  const { moviePreferences, tvPreferences, isCart, addCart } = useUserContext();
+  const { isCart, addCart } = useUserContext();
   
   const movieItem = {
     id: data.id,

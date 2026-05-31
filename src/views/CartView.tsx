@@ -2,8 +2,6 @@ import { Button } from "@/components";
 import { useUserContext } from "@/context";
 import { IMAGE_BASE_URL } from "@/core/constants";
 import { calculatePrice, getDisplayPrice, getYear } from "@/functions/PriceCalculator";
-import { FaHeart, FaTrash } from "react-icons/fa";
-
 
 export const CartView = () => {
     
@@ -56,19 +54,16 @@ export const CartView = () => {
                 </div>
             ))}
 
-            <div>
-                <div className="grid grid-cols-[80px_auto]">
-                    <span className="text-teal-400">Subtotal</span>
-                    <span className="font-bold">${subtotal.toFixed(2)}</span>
-                    <span className="text-teal-400">Tax</span>
-                    <span className="font-bold">${tax.toFixed(2)}</span>
-                    <span className="text-teal-400">Total</span>
-                    <span className="font-bold">${total.toFixed(2)}</span>
+                <div>
+                    <div className="grid grid-cols-[80px_auto]">
+                        <span className="text-teal-400">Subtotal</span>
+                        <span className="font-bold">${subtotal.toFixed(2)}</span>
+                        <span className="text-teal-400">Tax</span>
+                        <span className="font-bold">${tax.toFixed(2)}</span>
+                        <span className="text-teal-400">Total</span>
+                        <span className="font-bold">${total.toFixed(2)}</span>
+                    </div>
                 </div>
-            </div>
-
-
-
             </div>
         )}
         </section>

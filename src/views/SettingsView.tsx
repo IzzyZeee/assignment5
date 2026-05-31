@@ -1,7 +1,6 @@
 import { useUserContext } from "@/context";
 import { MOVIE_GENRES, TV_GENRES } from "@/core/constants";
 import { useState } from "react";
-import { Form } from "react-router-dom";
 
 export const SettingsView = () => {
     
@@ -130,4 +129,4 @@ export const SettingsView = () => {
             </div>
         </section>
     );
-} // hi
+}

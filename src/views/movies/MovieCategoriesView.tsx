@@ -20,7 +20,7 @@ function movieListUrl(listKey: string) { // Uses listKey to get working URL to g
 
 export const MovieCategoriesView = () => {
 
-    const { favorites, addFavorite, addCart, removeFavorite, removeCart, isFavorite, isCart } = useUserContext();
+    const { addFavorite, isFavorite, } = useUserContext();
 
     const { listKey } = useParams(); // To get whatever listKey is from router
     const navigate = useNavigate();

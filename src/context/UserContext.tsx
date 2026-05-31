@@ -1,6 +1,5 @@
 import { MOVIE_GENRES, TV_GENRES } from "@/core/constants";
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-// import { UserContext } from "@/context";
 
 export type UserItem = { // per item that'll be stored in favorites/cart (a movie, a tv show, a tv season)
     type: 'movie' | 'tv' | 'season';

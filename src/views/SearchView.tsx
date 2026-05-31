@@ -1,5 +1,5 @@
-import { ImageGrid, Pagination, SearchBar } from '@/components';
-import { useUserContext, type UserContextType, type UserItem } from '@/context';
+import { ImageGrid, Pagination } from '@/components';
+import { useUserContext, type UserItem } from '@/context';
 import { MULTISEARCH_ENDPOINT } from '@/core/constants';
 import type { MultiSearchResponse } from '@/core/types';
 import { calculatePrice, getDisplayPrice, getYear } from '@/functions/PriceCalculator';
@@ -15,7 +15,7 @@ export const SearchView = () => {
   const [page, setPage] = useState<number>(1);
   const type = searchParams.get('type');
 
-  const { addFavorite, removeFavorite, isFavorite } = useUserContext();
+  const { addFavorite, isFavorite } = useUserContext();
 
   useEffect(() => {
     setPage(1);

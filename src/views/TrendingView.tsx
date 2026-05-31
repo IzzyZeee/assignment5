@@ -12,7 +12,7 @@ export const TrendingView = () => {
   const [page, setPage] = useState<number>(1);
   const [searchParams, setSearchParams] = useSearchParams();
   const interval = searchParams.get('interval') || 'day';
-  const { favorites, addFavorite, addCart, removeFavorite, removeCart, isFavorite, isCart } = useUserContext();
+  const { addFavorite, isFavorite } = useUserContext();
 
   const [kind, setKind] = useState<'movie' | 'tv'>('movie'); // determine if it's movie or tv
   const { data } = useTmdb<MoviesResponse | TvsResponse>(

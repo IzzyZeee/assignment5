@@ -15,7 +15,7 @@ export const GenresView = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const interval = searchParams.get('interval') || 'day';
 
-  const { favorites, addFavorite, addCart, removeFavorite, removeCart, isFavorite, isCart, moviePreferences, tvPreferences } = useUserContext();
+  const { addFavorite, isFavorite, moviePreferences, tvPreferences } = useUserContext();
   const preferences = type === 'movie' ? moviePreferences : tvPreferences;
   const filteredGenreList = genreList.filter((g) => preferences.includes(g.id));
 
