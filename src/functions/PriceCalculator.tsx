@@ -12,5 +12,6 @@ export const getDisplayPrice = (price: number) => {
 }
 
 export const getYear = (release: string) => {
+    if (!release) return CURRENT_YEAR; // sometimes release date dont exist idk why
     return Number(release.substring(0, 4));
 }

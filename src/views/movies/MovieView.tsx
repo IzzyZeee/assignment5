@@ -27,10 +27,6 @@ export const MovieView = () => {
     release: getYear(data.release_date),
   }
 
-  // function addCart(): void {
-  //   throw new Error('Function not implemented.');
-  // }
-
   return (
     <Modal onClose={() => navigate(-1)}>
       <div className="p-6 space-y-6">

@@ -32,7 +32,7 @@ export const TelevisionView = () => {
               {data.first_air_date}
             </p>
             <p className="text-gray-400 flex items-center gap-2">
-              {data.number_of_seasons} Seasons - {data.number_of_episodes} Episodes
+              {data.number_of_seasons} Seasons - {data.number_of_episodes} Episodes, Status: <span className="font-bold">{data.status}</span>
             </p>
             <p className="text-gray-300">{data.overview}</p>
             

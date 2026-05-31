@@ -76,11 +76,10 @@ export const Header = () => {
             <Link to="/tv/airing_today">TV</Link>
             <Link to="/trending">Trending</Link>
             <Link to="/genres/movie/28">Genre</Link>
-            <Link to="/search">Search</Link>
           </div>
 
           <div className="flex gap-4 mt-4">
-            <p className="text">Welcome, <span className="font-bold">{username}</span>!</p>
+            <p className="text">Welcome, <span className="font-bold">{username.trim()}</span>!</p>
           </div>
         </div>
           
@@ -104,15 +103,17 @@ export const Header = () => {
           </Link>
           <Link to="/settings"><FaGear className="mt-1"/></Link>
         </div>
+        <div className="mt-1">
           <SearchBar value={search} onChange={useSearch} onSubmitSearch={doSearch} ></SearchBar>
+        </div>
           <div className="flex">
-            <div className="m-2">
+            <div className="m-1">
               <Button variant={searchKind === 'movie' ? 'primary' : 'grey'} onClick={() => changeSearchKind('movie')}>Movies</Button>
             </div>
-            <div className="m-2">
+            <div className="m-1">
               <Button variant={searchKind === 'tv' ? 'primary' : 'grey'} onClick={() => changeSearchKind('tv')}>TV</Button>
             </div>
-            <div className="m-2">
+            <div className="m-1">
               <Button variant={searchKind === 'person' ? 'primary' : 'grey'} onClick={() => changeSearchKind('person')}>People</Button>
             </div>
             

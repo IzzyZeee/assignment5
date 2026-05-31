@@ -10,9 +10,10 @@ export function useTmdb<T>(url: string, params: Record<string, any>, deps: any[]
 
     const fetchData = async () => {
       try {
+        const apiKey = localStorage.getItem('tmdb_key');
         const response = await axios.get<T>(url, {
           params: {
-            api_key: API_KEY,
+            api_key: apiKey,
             ...params,
           },
           signal: controller.signal,
