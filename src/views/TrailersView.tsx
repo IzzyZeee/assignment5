@@ -12,7 +12,7 @@ export const TrailersView = ({ kind }: Props) => {
   const { id } = useParams();
 
   if (kind === "movie") {
-    const { data } = useTmdb<MovieResponse>(`${MOVIE_ENDPOINT}/${id}`, { append_to_response: 'videos'}, []);
+    const { data } = useTmdb<MovieResponse>(`${MOVIE_ENDPOINT}/${id}`, { append_to_response: 'videos' }, []);
 
     if (!data) {
       return <p className="text-center text-gray-400">Loading...</p>;

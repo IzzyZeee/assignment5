@@ -16,7 +16,6 @@ export const SearchBar = ({ value, onChange, onSubmitSearch }: SearchBarProps) =
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-4">Search</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="search"
@@ -24,7 +23,7 @@ export const SearchBar = ({ value, onChange, onSubmitSearch }: SearchBarProps) =
           onChange={(e: ChangeEvent<HTMLInputElement>) => {
             onChange(e.target.value);
           }}
-          placeholder="Search actors, directors..."
+          placeholder="Search movies, TV, actors..."
           className="w-full p-3 rounded-xl bg-zinc-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
       </form>

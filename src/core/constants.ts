@@ -14,6 +14,10 @@ export const TV_TRENDING_ENDPOINT = 'https://api.themoviedb.org/3/trending/tv';
 export const TV_DISCOVER_ENDPOINT = 'https://api.themoviedb.org/3/discover/tv';
 
 export const MULTISEARCH_ENDPOINT = 'https://api.themoviedb.org/3/search/multi';
+export const SEARCH_MOVIE_ENDPOINT = 'https://api.themoviedb.org/3/search/movie';
+export const SEARCH_TV_ENDPOINT = 'https://api.themoviedb.org/3/search/tv';
+export const SEARCH_PERSON_ENDPOINT = 'https://api.themoviedb.org/3/search/person';
+
 export const GITHUB_LINK = 'https://github.com/IzzyZeee/assignment4.git';
 
 export const MOVIE_GENRES: Array<{ label: string; id: number }> = [

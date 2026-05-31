@@ -30,7 +30,7 @@ export const ImageGrid = ({ results, onClick, onFavorite, onCart, isFavorite, is
             {onFavorite && (
               <button
                 type="button"
-                className={`w-8 h-8 rounded-[100px] bg-black ${isFavorite?.(result.id) ? 'text-teal-500' : 'opacity-50text-white'}`}
+                className={`w-8 h-8 rounded-[100px] bg-black ${isFavorite?.(result.id) ? 'text-teal-500' : 'opacity-50 text-white'}`}
                 onClick={(event) => {
                   event.stopPropagation();
                   onFavorite(result.id);
@@ -42,13 +42,13 @@ export const ImageGrid = ({ results, onClick, onFavorite, onCart, isFavorite, is
             {onCart && (
               <button
                 type="button"
-                className=""
+                className={`w-8 h-8 rounded-[100px] bg-black ${isCart?.(result.id) ? 'text-teal-500' : 'opacity-50 text-white'}`}
                 onClick={(event) => {
                   event.stopPropagation();
                   onCart(result.id);
                 }}
               >
-                <IoCart />
+                <IoCart className="ml-2"/>
               </button>
             )}
           </div>

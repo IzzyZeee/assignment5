@@ -1,7 +1,7 @@
 import { Button, ImageGrid, Pagination } from "@/components";
 import { useUserContext, type UserItem } from "@/context";
 import type { MoviesResponse } from "@/core/types";
-import { getPrice, getYear } from "@/functions/PriceCalculator";
+import { calculatePrice, getDisplayPrice, getYear } from "@/functions/PriceCalculator";
 import { useTmdb } from "@/hooks";
 import { useState } from "react";
 import { FaArrowLeft } from "react-icons/fa";
@@ -64,7 +64,7 @@ export const MovieCategoriesView = () => {
         id: result.id,
         imagePath: result.poster_path ?? null,
         primaryText: result.title,
-        priceText: getPrice(getYear(result.release_date)),
+        priceText: getDisplayPrice(calculatePrice(getYear(result.release_date))),
     }));
 
     function findMovie(id: number): UserItem | undefined { 

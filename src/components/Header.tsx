@@ -17,29 +17,47 @@ export const Header = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [draft, setDraft] = useState(''); // what is left in the search bar
 
+  const [searchKind, setSearchKind] = useState<SearchKind>('movie');
   const onSearchPage = location.pathname === '/search'; // is the current link on search page? 
   const search = onSearchPage ? (searchParams.get('q') ?? '') : draft;
-  const searchKind = searchParams.get('type'); // get type from url
 
   const useSearch = (value: string) => {
+    setDraft(value); // save to local
+
     if (onSearchPage) {
-      setSearchParams(value.trim() ? { q: value } : {});
+      if (value.trim()) { // if not empty
+        setSearchParams({ q: value, type: searchKind });
+      } else {
+        setSearchParams({ type: searchKind });
+      }
     } else {
+      navigate({ pathname: '/search', search: `?type=${searchKind}&q=${encodeURIComponent(value)}`});
       setDraft(value);
     }
   }
 
   const doSearch = () => {
     const source = (onSearchPage ? search : draft).trim(); // btw trim is a function that removes extra spaces at start/end
-    navigate(source ? { pathname: '/search', search: `?q=${encodeURIComponent(source)}` } : { pathname: '/search' });
+    navigate(source ? { pathname: '/search', search: `?type=${searchKind}&?q=${encodeURIComponent(source)}` } : { pathname: '/search', search: `?type=${searchKind}` });
     if (!onSearchPage) {
       setDraft('');
     }
   }
 
-  const changeSearchKind = (searchType) => { 
-    const source = (onSearchPage ? search : draft).trim();
-    navigate({pathname: '/search', search: `?type=${searchType}&q=${encodeURIComponent(source)}`}) 
+  const changeSearchKind = (searchType: SearchKind) => {
+    setSearchKind(searchType); 
+    
+    const currentWord = onSearchPage ? search : draft; // if its in the url (on search link vs on another page and drafted)
+    const source = currentWord.trim(); // trimmed removes excess spaces
+
+    if (onSearchPage) {
+      setDraft(source);
+    } 
+
+    navigate(
+      {pathname: '/search', search: source ? `?type=${searchType}&q=${encodeURIComponent(source)}` : `type=${searchType}`}
+    )
+
   }
 
   return (

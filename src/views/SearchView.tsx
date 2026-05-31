@@ -2,7 +2,7 @@ import { ImageGrid, Pagination, SearchBar } from '@/components';
 import { useUserContext, type UserContextType, type UserItem } from '@/context';
 import { MULTISEARCH_ENDPOINT } from '@/core/constants';
 import type { MultiSearchResponse } from '@/core/types';
-import { getPrice, getYear } from '@/functions/PriceCalculator';
+import { calculatePrice, getDisplayPrice, getYear } from '@/functions/PriceCalculator';
 import { useDebounce, useTmdb } from '@/hooks';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -35,7 +35,7 @@ export const SearchView = () => {
     imagePath: (result.media_type === 'person' ? result.profile_path ?? null : result.poster_path ?? null),
     primaryText: result.title,
     secondaryText: result.media_type,
-    priceText: result.media_type === 'movie' && result.release_date ? getPrice(getYear(result.release_date)) : '',
+    priceText: result.media_type === 'movie' && result.release_date ? getDisplayPrice(calculatePrice(getYear(result.release_date))) : '',
   }));
 
   function findMovie(id: number): UserItem | undefined { 

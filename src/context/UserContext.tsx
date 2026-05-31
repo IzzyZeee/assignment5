@@ -9,6 +9,7 @@ export type UserItem = { // per item that'll be stored in favorites/cart (a movi
     release: number; // release date
     imagePath: string | null;
     seasonNumber?: number; // if it's a season ("?" means optional. only for tv)
+    tvId?: number;
 }
 
 export type UserContextType = { // contains all the context
@@ -19,11 +20,13 @@ export type UserContextType = { // contains all the context
     tvPreferences: number[];
     addFavorite: (item: UserItem) => void; // function description for a function that is made later, takes/returns x and y
     addCart: (item: UserItem) => void; // takes a UserItem but function returns nothing
+    clearCart: () => void;
     setUsername: (username: string) => void;
     setMoviePreferences: React.Dispatch<React.SetStateAction<number[]>>; // takes array of selected genres' IDs
     setTvPreferences: React.Dispatch<React.SetStateAction<number[]>>; // takes array of selected genres' IDs
     removeFavorite: (id: number, type: UserItem['type']) => void; // when looking in existing list: need item's id + type because movie/tv can hv same id
     removeCart: (id: number, type: UserItem['type']) => void;
+    clearFavorites: (type: string) => void; 
     isFavorite: (id: number, type: UserItem['type']) => boolean; // UserItem['variableInUserItemWithThisName']
     isCart: (id: number, type: UserItem['type']) => boolean;
 }
@@ -131,6 +134,14 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
         setFavorites((prev) => prev.filter((item) => item.id !== id || item.type !== type)); // filter: diff id | type = true (keep). same id & type = false
     }
 
+    function clearCart() {
+        setCart([]);
+    }
+
+    function clearFavorites(type: string) {
+        setFavorites( (prev) => prev.filter((items) => items.type !== type)); // remove unless diff type
+    }
+
     function removeCart(id: number, type: UserItem['type']) {
         setCart((prev) => prev.filter((item) => item.id !== id || item.type !== type)); 
     }
@@ -154,6 +165,8 @@ export const UserProvider = ({ children }: UserProviderProps) => { // stuff shar
                 setUsername,
                 addFavorite,
                 addCart,
+                clearFavorites,
+                clearCart,
                 setMoviePreferences,
                 setTvPreferences,
                 removeFavorite,

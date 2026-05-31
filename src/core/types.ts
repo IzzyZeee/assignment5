@@ -27,11 +27,12 @@ export type MovieResponse = {
   backdrop_path: string;
   release_date: string;
   vote_average: string;
-  genre_ids?: {
-    genre_results: Array<{
-      id: number;
-    }>;
-  };
+  runtime: number;
+  genre_results: Array<{
+    id: number;
+    name: string;
+  }>;
+  
   videos?: {
     results: Array<{
       key: string;
@@ -51,11 +52,11 @@ export type TvResponse = {
   first_air_date: string;
   number_of_seasons: number;
   number_of_episodes: number;
-  genre_ids?: {
-    genre_results: Array<{
-      id: number;
-    }>;
-  };
+  status: string;
+  genre_results: Array<{
+    id: number;
+  }>;
+
   videos?: {
     results: Array<{
       key: string;
@@ -69,9 +70,11 @@ export type TvResponse = {
 export type CreditsResponse = {
   cast: Array<{
     id: number;
-    name: string;
+    title?: string;
+    name?: string;
     poster_path: string | null;
     character: string;
+    media_type: 'movie' | 'tv';
   }>;
 };
 
@@ -121,7 +124,7 @@ export type MultiSearchResponse = {
     media_type: string;
     title?: string;
     original_title?: string;
-    first_air_ate?: string;
+    first_air_date?: string;
     release_date?: string;
     profile_path: string | null;
     poster_path: string | null;
@@ -137,6 +140,7 @@ export type PersonResponse = {
   profile_path: string;
   place_of_birth: string;
   birthday: string;
+  deathday: string;
   overview: string;
   biography: string;
   results: Array<{
