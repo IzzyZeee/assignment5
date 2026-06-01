@@ -1,7 +1,7 @@
 import { Button } from "@/components";
 import { useUserContext } from "@/context";
 import { IMAGE_BASE_URL } from "@/core/constants";
-import { calculatePrice, getDisplayPrice, getYear } from "@/functions/PriceCalculator";
+import { calculatePrice, getDisplayPrice } from "@/functions/PriceCalculator";
 
 export const CartView = () => {
     
